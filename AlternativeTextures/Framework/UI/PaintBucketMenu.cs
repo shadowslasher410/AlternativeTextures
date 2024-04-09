@@ -104,7 +104,7 @@ namespace AlternativeTextures.Framework.UI
                         objectWithVariation.modData[textureNameKey] = availableModels[m].GetId();
                         objectWithVariation.modData[textureVariationKey] = manualVariations[v].Id.ToString();
                         objectWithVariation.modData[textureSeasonKey] = availableModels[m].Season;
-                        objectWithVariation.modData[textureDisplayNameKey] = manualVariations[v].Name;
+                        objectWithVariation.modData[textureDisplayNameKey] = String.IsNullOrEmpty(manualVariations[v].Name) ? String.Empty : manualVariations[v].Name;
 
                         if (AlternativeTextures.modConfig.IsTextureVariationDisabled(objectWithVariation.modData[textureNameKey], manualVariations[v].Id))
                         {
