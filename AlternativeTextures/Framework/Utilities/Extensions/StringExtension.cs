@@ -1,7 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using static System.Net.Mime.MediaTypeNames;
-using System;
+﻿using System;
 
 namespace AlternativeTextures.Framework.Utilities.Extensions
 {

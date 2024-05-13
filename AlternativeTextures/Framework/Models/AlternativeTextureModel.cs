@@ -241,7 +241,7 @@ namespace AlternativeTextures.Framework.Models
             }
 
             return name;
-        }        
+        }
 
         internal bool HandleTypeChanges()
         {
