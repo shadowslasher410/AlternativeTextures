@@ -2,6 +2,7 @@
 using AlternativeTextures.Framework.Models;
 using AlternativeTextures.Framework.Patches.Entities;
 using AlternativeTextures.Framework.Utilities;
+using AlternativeTextures.Framework.Utilities.Extensions;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -78,7 +79,7 @@ namespace AlternativeTextures.Framework.Patches
 
         internal static string GetModelNameWithoutSeason(string modelName, string season)
         {
-            return modelName.Replace($"_{season}", String.Empty, StringComparison.OrdinalIgnoreCase);
+            return modelName.ReplaceLastInstance($"_{season}", String.Empty);
         }
 
         internal static string GetObjectName(Object obj)
