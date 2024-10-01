@@ -23,6 +23,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.GameData;
+using StardewValley.GameData.GiantCrops;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.Objects;
@@ -1332,38 +1333,61 @@ namespace AlternativeTextures
                 return;
             }
 
-            var environment = Game1.currentLocation;
-            foreach (var tile in environment.terrainFeatures.Pairs.Where(t => t.Value is HoeDirt))
-            {
-                int xTile = 0;
-                int yTile = 0;
-                var hoeDirt = tile.Value as HoeDirt;
+            GameLocation gameLocation = Game1.currentLocation;
 
-                if (hoeDirt.crop is null || hoeDirt.crop.indexOfHarvest.Value != args[0])
+            foreach (var tile in gameLocation.terrainFeatures.Pairs.Where(t => t.Value is HoeDirt))
+            {
+                Crop crop = (tile.Value as HoeDirt).crop;
+
+                if (crop is null || crop.indexOfHarvest.Value != args[0])
                 {
                     continue;
                 }
 
-                xTile = (int)tile.Key.X;
-                yTile = (int)tile.Key.Y;
-
-                if (xTile != 0 && yTile != 0)
+                if (crop.TryGetGiantCrops(out var giantCrops))
                 {
-                    for (int x = xTile - 1; x <= xTile + 1; x++)
+                    Vector2 vector = crop.tilePosition;
+                    Point point = Utility.Vector2ToPoint(vector);
+
+                    foreach (KeyValuePair<string, GiantCropData> item in giantCrops)
                     {
-                        for (int y2 = yTile - 1; y2 <= yTile + 1; y2++)
+                        string key = item.Key;
+                        GiantCropData value = item.Value;
+                        bool flag = true;
+
+                        for (int i = point.Y; i < point.Y + value.TileSize.Y; i++)
                         {
-                            Vector2 v3 = new Vector2(x, y2);
-                            if (!environment.terrainFeatures.ContainsKey(v3) || !(environment.terrainFeatures[v3] is HoeDirt) || (environment.terrainFeatures[v3] as HoeDirt).crop == null)
+                            for (int j = point.X; j < point.X + value.TileSize.X; j++)
                             {
-                                continue;
+                                Vector2 key2 = new(j, i);
+
+                                if (!gameLocation.terrainFeatures.TryGetValue(key2, out TerrainFeature terrainFeature) || terrainFeature is not HoeDirt hoeDirt2 || hoeDirt2.crop?.indexOfHarvest.Value != crop.indexOfHarvest.Value)
+                                {
+                                    flag = false;
+                                    break;
+                                }
                             }
-
-                            (environment.terrainFeatures[v3] as HoeDirt).crop = null;
+                            if (!flag)
+                            {
+                                break;
+                            }
                         }
-                    }
+                        if (!flag)
+                        {
+                            continue;
+                        }
+                        for (int k = point.Y; k < point.Y + value.TileSize.Y; k++)
+                        {
+                            for (int l = point.X; l < point.X + value.TileSize.X; l++)
+                            {
+                                Vector2 key3 = new(l, k);
 
-                    environment.resourceClumps.Add(new GiantCrop(args[0], new Vector2(xTile - 1, yTile - 1)));
+                                ((HoeDirt)gameLocation.terrainFeatures[key3]).crop = null;
+                            }
+                        }
+                        gameLocation.resourceClumps.Add(new GiantCrop(key, vector));
+                        break;
+                    }
                 }
             }
         }
