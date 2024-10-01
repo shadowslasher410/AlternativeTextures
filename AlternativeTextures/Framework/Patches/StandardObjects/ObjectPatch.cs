@@ -288,7 +288,7 @@ namespace AlternativeTextures.Framework.Patches.StandardObjects
                     flooring.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SHEET_ID] = __instance.ParentSheetIndex.ToString();
 
                     var flooringName = $"{AlternativeTextureModel.TextureType.Flooring}_{GetFlooringName(flooring)}";
-                    var flooringSeasonName = $"{flooringName}_{Game1.currentSeason}";
+                    var flooringSeasonName = $"{flooringName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
                     if (AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(flooringName) && AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(flooringSeasonName))
                     {
                         var result = Game1.random.Next(2) > 0 ? AssignModData(flooring, flooringSeasonName, true) : AssignModData(flooring, flooringName, false);
@@ -316,7 +316,7 @@ namespace AlternativeTextures.Framework.Patches.StandardObjects
 
             var modelType = placedObject is Furniture ? AlternativeTextureModel.TextureType.Furniture : AlternativeTextureModel.TextureType.Craftable;
             var instanceName = $"{modelType}_{GetObjectName(placedObject)}";
-            var instanceSeasonName = $"{instanceName}_{Game1.currentSeason}";
+            var instanceSeasonName = $"{instanceName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
 
             if (HasCachedTextureName(__instance) is true)
             {
@@ -354,7 +354,7 @@ namespace AlternativeTextures.Framework.Patches.StandardObjects
             }
 
             var instanceName = $"{AlternativeTextureModel.TextureType.ArtifactSpot}_{GetObjectName(__instance)}";
-            var instanceSeasonName = $"{instanceName}_{Game1.currentSeason}";
+            var instanceSeasonName = $"{instanceName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
 
             if (AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceName) && AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceSeasonName))
             {

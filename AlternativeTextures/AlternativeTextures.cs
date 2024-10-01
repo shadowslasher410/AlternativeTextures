@@ -417,7 +417,7 @@ namespace AlternativeTextures
                 var modelType = placedObject is Furniture ? AlternativeTextureModel.TextureType.Furniture : AlternativeTextureModel.TextureType.Craftable;
                 if (!placedObject.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_NAME) || !placedObject.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION))
                 {
-                    var instanceSeasonName = $"{modelType}_{PatchTemplate.GetObjectName(placedObject)}_{Game1.currentSeason}";
+                    var instanceSeasonName = $"{modelType}_{PatchTemplate.GetObjectName(placedObject)}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
                     PatchTemplate.AssignDefaultModData(placedObject, instanceSeasonName, true);
                 }
 
@@ -629,9 +629,9 @@ namespace AlternativeTextures
                 }
                 else
                 {
-                    if (Game1.currentLocation is Farm farm)
+                    if (Game1.currentLocation.IsBuildableLocation())
                     {
-                        var targetedBuilding = farm.getBuildingAt(new Vector2(xTile / 64, yTile / 64));
+                        var targetedBuilding = Game1.currentLocation.getBuildingAt(new Vector2(xTile / 64, yTile / 64));
                         if (targetedBuilding != null)
                         {
                             Game1.addHUDMessage(new HUDMessage(modHelper.Translation.Get("messages.warning.spray_can_not_supported"), 3) { timeLeft = 2000 });
@@ -650,7 +650,7 @@ namespace AlternativeTextures
                 var modelType = placedObject is Furniture ? AlternativeTextureModel.TextureType.Furniture : AlternativeTextureModel.TextureType.Craftable;
                 if (!placedObject.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_NAME) || !placedObject.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION))
                 {
-                    var instanceSeasonName = $"{modelType}_{PatchTemplate.GetObjectName(placedObject)}_{Game1.currentSeason}";
+                    var instanceSeasonName = $"{modelType}_{PatchTemplate.GetObjectName(placedObject)}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
                     PatchTemplate.AssignDefaultModData(placedObject, instanceSeasonName, true);
                 }
 
@@ -1326,9 +1326,9 @@ namespace AlternativeTextures
                 return;
             }
 
-            if (!(Game1.currentLocation is Farm))
+            if (!(Game1.currentLocation.GetData()?.CanPlantHere ?? Game1.currentLocation.IsFarm) || (Game1.currentLocation is not Farm && !Game1.currentLocation.HasMapPropertyWithValue("AllowGiantCrops")))
             {
-                Monitor.Log($"Command can only be used on player's farm.", LogLevel.Warn);
+                Monitor.Log($"Command can only be used on a plantable location allowing giant crops.", LogLevel.Warn);
                 return;
             }
 
@@ -1363,7 +1363,7 @@ namespace AlternativeTextures
                         }
                     }
 
-                    (environment as Farm).resourceClumps.Add(new GiantCrop(args[0], new Vector2(xTile - 1, yTile - 1)));
+                    environment.resourceClumps.Add(new GiantCrop(args[0], new Vector2(xTile - 1, yTile - 1)));
                 }
             }
         }
@@ -1376,9 +1376,9 @@ namespace AlternativeTextures
                 return;
             }
 
-            if (!(Game1.currentLocation is Farm))
+            if (!Game1.currentLocation.IsOutdoors)
             {
-                Monitor.Log($"Command can only be used on player's farm.", LogLevel.Warn);
+                Monitor.Log($"Command can only be used outdoors.", LogLevel.Warn);
                 return;
             }
 
@@ -1388,7 +1388,7 @@ namespace AlternativeTextures
                 return;
             }
 
-            (Game1.currentLocation as Farm).resourceClumps.Add(new ResourceClump(600, 2, 2, Game1.player.Tile + new Vector2(1, 1)));
+            Game1.currentLocation.resourceClumps.Add(new ResourceClump(600, 2, 2, Game1.player.Tile + new Vector2(1, 1)));
         }
 
         private void DebugSpawnChild(string command, string[] args)
