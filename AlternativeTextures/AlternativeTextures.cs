@@ -617,7 +617,7 @@ namespace AlternativeTextures
                 else if (terrainFeature is FruitTree fruitTree)
                 {
                     var modelType = AlternativeTextureModel.TextureType.FruitTree;
-                    var saplingName = Game1.objectData.ContainsKey(fruitTree.treeId) ? Game1.objectData[fruitTree.treeId].Name : String.Empty;
+                    var saplingName = Game1.objectData.ContainsKey(fruitTree.treeId.Value) ? Game1.objectData[fruitTree.treeId.Value].Name : String.Empty;
                     if (!fruitTree.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_NAME) || !fruitTree.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION))
                     {
                         // Assign default modData
@@ -778,7 +778,7 @@ namespace AlternativeTextures
                         if (terrainFeature is FruitTree fruitTree)
                         {
                             var modelType = AlternativeTextureModel.TextureType.FruitTree;
-                            var saplingName = Game1.fruitTreeData.ContainsKey(fruitTree.treeId) ? Game1.objectData[fruitTree.treeId].Name : String.Empty;
+                            var saplingName = Game1.fruitTreeData.ContainsKey(fruitTree.treeId.Value) ? Game1.objectData[fruitTree.treeId.Value].Name : String.Empty;
                             if (tool.modData[SPRAY_CAN_FLAG] == $"{modelType}_{saplingName}")
                             {
                                 fruitTree.modData[ModDataKeys.ALTERNATIVE_TEXTURE_OWNER] = actualSelectedModel.Owner;

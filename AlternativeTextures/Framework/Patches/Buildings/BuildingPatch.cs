@@ -68,12 +68,12 @@ namespace AlternativeTextures.Framework.Patches.Buildings
                     y += 32;
                     //building.drawShadow(b, x, y);
                     b.Draw(texture, new Vector2(x, y), new Rectangle(0, 80, 80, 80), new Color(60, 126, 150) * alpha, 0f, new Vector2(0f, 0f), scale, SpriteEffects.None, 1f);
-                    for (int yWater = building.tileY; yWater < (int)building.tileY + 5; yWater++)
+                    for (int yWater = building.tileY.Value; yWater < building.tileY.Value + 5; yWater++)
                     {
-                        for (int xWater = building.tileX; xWater < (int)building.tileX + 4; xWater++)
+                        for (int xWater = building.tileX.Value; xWater < building.tileX.Value + 4; xWater++)
                         {
-                            bool num = yWater == (int)building.tileY + 4;
-                            bool topY = yWater == (int)building.tileY;
+                            bool num = yWater == building.tileY.Value + 4;
+                            bool topY = yWater == building.tileY.Value;
                             if (num)
                             {
                                 b.Draw(Game1.mouseCursors, new Vector2(x + xWater * 64 + 32, y + (yWater + 1) * 64 - (int)Game1.currentLocation.waterPosition - 32), new Rectangle(Game1.currentLocation.waterAnimationIndex * 64, 2064 + (((xWater + yWater) % 2 != 0) ? ((!Game1.currentLocation.waterTileFlip) ? 128 : 0) : (Game1.currentLocation.waterTileFlip ? 128 : 0)), 64, 32 + (int)Game1.currentLocation.waterPosition - 5), Game1.currentLocation.waterColor.Value, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
@@ -103,7 +103,7 @@ namespace AlternativeTextures.Framework.Patches.Buildings
                         x += (int)(data.DrawOffset.X * 4f);
                         y += (int)(data.DrawOffset.Y * 4f);
                     }
-                    float baseSortY = (int)building.tilesHigh * 64;
+                    float baseSortY = building.tilesHigh.Value * 64;
                     float sortY = baseSortY;
                     if (data != null)
                     {
@@ -234,9 +234,9 @@ namespace AlternativeTextures.Framework.Patches.Buildings
                 return true;
             }
 
-            if (__instance is Stable || __instance.maxOccupants == TRACTOR_GARAGE_ID)
+            if (__instance is Stable || __instance.maxOccupants.Value == TRACTOR_GARAGE_ID)
             {
-                if (__instance.isMoving || __instance.daysOfConstructionLeft > 0)
+                if (__instance.isMoving || __instance.daysOfConstructionLeft.Value > 0)
                 {
                     return true;
                 }
@@ -256,7 +256,7 @@ namespace AlternativeTextures.Framework.Patches.Buildings
                 var paintedTexture = BuildingPatch.GetBuildingTextureWithPaint(__instance, textureModel, textureVariation);
 
                 __instance.drawShadow(b);
-                b.Draw(paintedTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2((int)__instance.tileX * 64, (int)__instance.tileY * 64 + (int)__instance.tilesHigh * 64)), paintedTexture.Bounds, __instance.color * ___alpha, 0f, new Vector2(0f, __instance.texture.Value.Bounds.Height), 4f, SpriteEffects.None, (float)(((int)__instance.tileY + (int)__instance.tilesHigh - 1) * 64) / 10000f);
+                b.Draw(paintedTexture, Game1.GlobalToLocal(Game1.viewport, new Vector2(__instance.tileX.Value * 64, __instance.tileY.Value * 64 + __instance.tilesHigh.Value * 64)), paintedTexture.Bounds, __instance.color * ___alpha, 0f, new Vector2(0f, __instance.texture.Value.Bounds.Height), 4f, SpriteEffects.None, (float)((__instance.tileY.Value + __instance.tilesHigh.Value - 1) * 64) / 10000f);
 
                 return false;
             }

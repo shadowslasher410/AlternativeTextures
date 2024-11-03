@@ -352,7 +352,7 @@ namespace AlternativeTextures.Framework.Patches.Tools
                     };
                     buildingObj.modData.SetFromSerialization(targetedBuilding.modData);
 
-                    Game1.activeClickableMenu = GetMenu(buildingObj, buildingObj.TileLocation * 64f, GetTextureType(targetedBuilding), modelName, _helper.Translation.Get("tools.name.paint_bucket"), textureTileWidth: targetedBuilding.tilesWide, isSprayCan: isSprayCan);
+                    Game1.activeClickableMenu = GetMenu(buildingObj, buildingObj.TileLocation * 64f, GetTextureType(targetedBuilding), modelName, _helper.Translation.Get("tools.name.paint_bucket"), textureTileWidth: targetedBuilding.tilesWide.Value, isSprayCan: isSprayCan);
 
                     return CancelUsing(who);
                 }
@@ -459,7 +459,7 @@ namespace AlternativeTextures.Framework.Patches.Tools
                     else if (targetedTerrain is FruitTree fruitTree)
                     {
                         Dictionary<int, string> data = Game1.content.Load<Dictionary<int, string>>("Data\\fruitTrees");
-                        var saplingName = Game1.fruitTreeData.ContainsKey(fruitTree.treeId) ? Game1.objectData[fruitTree.treeId].Name : String.Empty;
+                        var saplingName = Game1.fruitTreeData.ContainsKey(fruitTree.treeId.Value) ? Game1.objectData[fruitTree.treeId.Value].Name : String.Empty;
 
                         var instanceSeasonName = $"{AlternativeTextureModel.TextureType.FruitTree}_{saplingName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
                         AssignDefaultModData(targetedTerrain, instanceSeasonName, true);
