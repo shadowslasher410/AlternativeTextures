@@ -45,14 +45,14 @@ namespace AlternativeTextures.Framework.Patches.Buildings
             }
 
             var instanceName = String.Concat(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_OWNER], ".", $"{AlternativeTextureModel.TextureType.Building}_{GetBuildingName(__instance)}");
-            var instanceSeasonName = $"{instanceName}_{Game1.currentSeason}";
+            var instanceSeasonName = $"{instanceName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
 
             if (!String.Equals(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME], instanceName, StringComparison.OrdinalIgnoreCase) && !String.Equals(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME], instanceSeasonName, StringComparison.OrdinalIgnoreCase))
             {
                 __instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME] = String.Concat(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_OWNER], ".", $"{AlternativeTextureModel.TextureType.Building}_{GetBuildingName(__instance)}");
                 if (__instance.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_SEASON) && !String.IsNullOrEmpty(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON]))
                 {
-                    __instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.currentSeason;
+                    __instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.GetSeasonForLocation(Game1.currentLocation).ToString();
                     __instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME] = String.Concat(__instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME], "_", __instance.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON]);
 
                     __instance.resetTexture();
@@ -217,7 +217,7 @@ namespace AlternativeTextures.Framework.Patches.Buildings
             // Handle Greenhouse logic
             if (__instance.buildingType.Value == "Greenhouse")
             {
-                Farm farm = __instance.GetParentLocation() as Farm;
+                Farm farm = Game1.getFarm();
                 if (farm is not null && farm.greenhouseUnlocked.Value is false)
                 {
                     yOffset -= buildingData.SourceRect.Height;
@@ -446,7 +446,7 @@ namespace AlternativeTextures.Framework.Patches.Buildings
         private static void BuildingPostfix(Building __instance, string type, Vector2 tile)
         {
             var instanceName = $"{AlternativeTextureModel.TextureType.Building}_{GetBuildingName(__instance)}";
-            var instanceSeasonName = $"{instanceName}_{Game1.currentSeason}";
+            var instanceSeasonName = $"{instanceName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
 
             if (AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceName) && AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceSeasonName))
             {

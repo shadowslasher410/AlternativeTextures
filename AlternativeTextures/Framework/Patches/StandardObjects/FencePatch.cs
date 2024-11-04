@@ -157,7 +157,7 @@ namespace AlternativeTextures.Framework.Patches.StandardObjects
             if (dropInItem.ParentSheetIndex == 325 && __result)
             {
                 var instanceName = $"{AlternativeTextureModel.TextureType.Craftable}_{Game1.objectData[dropInItem.ItemId].Name}";
-                var instanceSeasonName = $"{instanceName}_{Game1.currentSeason}";
+                var instanceSeasonName = $"{instanceName}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
 
                 if (AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceName) && AlternativeTextures.textureManager.DoesObjectHaveAlternativeTexture(instanceSeasonName))
                 {

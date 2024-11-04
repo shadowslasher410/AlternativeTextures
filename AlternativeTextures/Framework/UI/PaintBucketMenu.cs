@@ -636,7 +636,7 @@ namespace AlternativeTextures.Framework.UI
                         var farmerHouse = mailBoxFarm.GetMainFarmHouse();
                         if (farmerHouse.modData.ContainsKey(ModDataKeys.ALTERNATIVE_TEXTURE_NAME) is false)
                         {
-                            var instanceSeasonName = $"{TextureType.Building}_{$"Farmhouse_{Game1.MasterPlayer.HouseUpgradeLevel}"}_{Game1.currentSeason}";
+                            var instanceSeasonName = $"{TextureType.Building}_{$"Farmhouse_{Game1.MasterPlayer.HouseUpgradeLevel}"}_{Game1.GetSeasonForLocation(Game1.currentLocation)}";
                             PatchTemplate.AssignDefaultModData(farmerHouse, instanceSeasonName, true);
                         }
                     }
@@ -863,7 +863,7 @@ namespace AlternativeTextures.Framework.UI
                             }
                             else if (Game1.currentLocation is Farm mailBoxFarm && mailBoxFarm.GetMainMailboxPosition() is Point mailboxPosition && PatchTemplate.IsPositionNearMailbox(Game1.currentLocation, mailboxPosition, (int)(_position.X / 64), (int)(_position.Y / 64)))
                             {
-                                Texture2D mailboxTexture = Game1.content.Load<Texture2D>($"Maps\\{Game1.currentSeason.ToLower()}_outdoorsTileSheet");
+                                Texture2D mailboxTexture = Game1.content.Load<Texture2D>($"Maps\\{Game1.GetSeasonForLocation(Game1.currentLocation).ToString().ToLower()}_outdoorsTileSheet");
                                 b.Draw(mailboxTexture, new Vector2(this.availableTextures[i].bounds.X, this.availableTextures[i].bounds.Y), new Rectangle(80, 1232, 16, 32), Color.White, 0f, new Vector2(0f, 0f), 4f, SpriteEffects.None, 0.89f);
                             }
                             else if (PatchTemplate.GetBuildingAt(Game1.currentLocation, (int)_position.X, (int)_position.Y) is Building building)

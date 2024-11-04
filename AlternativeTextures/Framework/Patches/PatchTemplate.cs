@@ -255,9 +255,9 @@ namespace AlternativeTextures.Framework.Patches
         {
             var tileLocation = new Vector2(x / 64, y / 64);
             var rectangle = new Rectangle(x, y, 64, 64);
-            if (location is Farm farm)
+            if (location.IsBuildableLocation())
             {
-                foreach (var animal in farm.animals.Values)
+                foreach (var animal in location.animals.Values)
                 {
                     if (animal.GetBoundingBox().Intersects(rectangle))
                     {
@@ -458,7 +458,7 @@ namespace AlternativeTextures.Framework.Patches
                 return false;
             }
 
-            var textureModel = new AlternativeTextureModel() { Owner = AlternativeTextures.DEFAULT_OWNER, Season = trackSeason ? Game1.currentSeason : String.Empty };
+            var textureModel = new AlternativeTextureModel() { Owner = AlternativeTextures.DEFAULT_OWNER, Season = trackSeason ? Game1.GetSeasonForLocation(Game1.currentLocation).ToString() : String.Empty };
             switch (type)
             {
                 case Object obj:
@@ -476,8 +476,8 @@ namespace AlternativeTextures.Framework.Patches
                 case DecoratableLocation decoratableLocation:
                     AssignDecoratableLocationModData(decoratableLocation, modelName, textureModel, -1, trackSeason);
                     return true;
-                case Farm farm:
-                    AssignFarmModData(farm, modelName, textureModel, -1, trackSeason);
+                case GameLocation gameLocation when gameLocation.IsBuildableLocation():
+                    AssignGameLocationModData(gameLocation, modelName, textureModel, -1, trackSeason);
                     return true;
             }
 
@@ -541,7 +541,7 @@ namespace AlternativeTextures.Framework.Patches
 
             if (trackSeason && !String.IsNullOrEmpty(textureModel.Season))
             {
-                obj.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.currentSeason;
+                obj.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.GetSeasonForLocation(Game1.currentLocation).ToString();
             }
 
             if (trackSheetId)
@@ -585,7 +585,7 @@ namespace AlternativeTextures.Framework.Patches
 
             if (trackSeason && !String.IsNullOrEmpty(textureModel.Season))
             {
-                building.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.currentSeason;
+                building.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.GetSeasonForLocation(Game1.currentLocation).ToString();
             }
 
             building.modData[ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION] = variation.ToString();
@@ -598,23 +598,23 @@ namespace AlternativeTextures.Framework.Patches
 
             if (trackSeason && !String.IsNullOrEmpty(textureModel.Season))
             {
-                decoratableLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.currentSeason;
+                decoratableLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.GetSeasonForLocation(Game1.currentLocation).ToString();
             }
 
             decoratableLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION] = variation.ToString();
         }
 
-        private static void AssignFarmModData(Farm farm, string modelName, AlternativeTextureModel textureModel, int variation, bool trackSeason = false)
+        private static void AssignGameLocationModData(GameLocation gameLocation, string modelName, AlternativeTextureModel textureModel, int variation, bool trackSeason = false)
         {
-            farm.modData[ModDataKeys.ALTERNATIVE_TEXTURE_OWNER] = textureModel.Owner;
-            farm.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME] = String.Concat(textureModel.Owner, ".", modelName);
+            gameLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_OWNER] = textureModel.Owner;
+            gameLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_NAME] = String.Concat(textureModel.Owner, ".", modelName);
 
             if (trackSeason && !String.IsNullOrEmpty(textureModel.Season))
             {
-                farm.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.currentSeason;
+                gameLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_SEASON] = Game1.GetSeasonForLocation(Game1.currentLocation).ToString();
             }
 
-            farm.modData[ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION] = variation.ToString();
+            gameLocation.modData[ModDataKeys.ALTERNATIVE_TEXTURE_VARIATION] = variation.ToString();
         }
     }
 }
