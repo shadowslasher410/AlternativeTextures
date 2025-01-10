@@ -78,7 +78,7 @@ namespace AlternativeTextures
         private static Api _api;
 
         // Tool related variables
-        private Point _lastSprayCanTile = new Point();
+        private Point _lastSprayCanTile = new();
 
         // Debugging flags
         private bool _displayFPS = false;
