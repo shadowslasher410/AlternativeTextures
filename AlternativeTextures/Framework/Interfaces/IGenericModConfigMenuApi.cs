@@ -1,13 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
+using StardewValley;
 using System;
 
 namespace AlternativeTextures.Framework.Interfaces
 {
+    /// <summary>The API which lets other mods add a config UI through Generic Mod Config Menu.</summary>
     public interface IGenericModConfigMenuApi
     {
-         /*********
+        /*********
         ** Methods
         *********/
         /****
@@ -20,6 +23,7 @@ namespace AlternativeTextures.Framework.Interfaces
         /// <param name="titleScreenOnly">Whether the options can only be edited from the title screen.</param>
         /// <remarks>Each mod can only be registered once, unless it's deleted via <see cref="Unregister"/> before calling this again.</remarks>
         void Register(IManifest mod, Action reset, Action save, bool titleScreenOnly = false);
+
 
         /****
         ** Basic options
@@ -116,7 +120,7 @@ namespace AlternativeTextures.Framework.Interfaces
         /// <param name="pageTitle">The page title shown in its UI, or <c>null</c> to show the <paramref name="pageId"/> value.</param>
         /// <remarks>You must also call <see cref="AddPageLink"/> to make the page accessible. This is only needed to set up a multi-page config UI. If you don't call this method, all options will be part of the mod's main config UI instead.</remarks>
         void AddPage(IManifest mod, string pageId, Func<string> pageTitle = null);
-        
+
         /// <summary>Add a link to a page added via <see cref="AddPage"/> at the current position in the form.</summary>
         /// <param name="mod">The mod's manifest.</param>
         /// <param name="pageId">The unique ID of the page to open when the link is clicked.</param>
